@@ -28,7 +28,7 @@
           
           <form id="signin-form" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
               <input type="text" id="full_name" placeholder="Full Name" required>
-              <input type="email" id="email" placeholder="Email (used for login)" required>
+              <input type="text" id="username" placeholder="Username" required> <input type="number" id="age" placeholder="Age" required> <input type="email" id="email" placeholder="Email (used for login)" required>
               <input type="password" id="password" placeholder="Password" required>
               
               <button type="submit" class="signin_btn">Sign in</button>
@@ -47,6 +47,8 @@
 
             // Get data from form
             const fullName = document.getElementById('full_name').value;
+            const username = document.getElementById('username').value; // New
+            const age = document.getElementById('age').value;         // New
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
@@ -56,9 +58,10 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         full_name: fullName,
+                        username: username, // New
+                        age: parseInt(age), // New
                         email: email,
                         password: password
-                        // Your app.py ignores Age and Username, so we don't send them.
                     })
                 });
 

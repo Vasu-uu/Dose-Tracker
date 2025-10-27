@@ -81,15 +81,19 @@ header {
 .child input[type="text"],
 .child input[type="password"],
 .child input[type="number"],
-.child input[type="email"] {
+.child input[type="email"],
+.child input[type="date"] { /* Added date input */
     width: 60%; /* Increased width */
     height: 45px; /* Fixed height */
     border-radius: 10px;
     padding-left: 10px;
+    padding-right: 10px; /* Added for consistency */
     border: 2PX solid navy;
     background-color: rgba(51, 132, 254, 0.267);
     margin-bottom: 20px; /* Consistent margin */
     font-size: 1rem;
+    font-family: Arial, Helvetica, sans-serif; /* Added for consistency */
+    color: navy; /* Added for consistency */
 }
 
 .child input:hover {
@@ -327,6 +331,19 @@ tbody tr:last-child td {
     font-weight: 600;
 }
 
+/* Style for new date labels */
+#new_medicine_child > label {
+    width: 70%;
+    text-align: left;
+    color: navy;
+    font-weight: 600;
+    margin-bottom: 5px;
+    margin-top: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.9rem;
+}
+
+
 .textbox1 {
     width: 70%;
     height: 45px;
@@ -336,6 +353,8 @@ tbody tr:last-child td {
     background-color: rgba(51, 132, 254, 0.267);
     margin-bottom: 1vh;
     margin-top: 2vh;
+    font-family: Arial, Helvetica, sans-serif;
+    color: navy;
 }
 
 .textbox2 {
@@ -346,6 +365,14 @@ tbody tr:last-child td {
     border: 2PX solid navy;
     background-color: rgba(51, 132, 254, 0.267);
     margin-bottom: 3vh;
+    font-family: Arial, Helvetica, sans-serif;
+    color: navy;
+}
+
+.textbox2[type="date"], 
+.textbox2[type="number"] {
+    padding-right: 10px;
+    margin-bottom: 1vh; /* Tighter spacing for dates */
 }
 
 #new_medicine_form .child { /* Target form inside child */
@@ -356,7 +383,7 @@ tbody tr:last-child td {
     margin-top: 0;
 }
 
-.radio_div {
+.radio_div { /* Kept in case you re-add it */
     display: flex;
     align-items: center;
     gap: 10px;
@@ -364,7 +391,7 @@ tbody tr:last-child td {
     justify-content: center;
 }
 
-#new_medicine_child label {
+#new_medicine_child label { /* Default label style */
     color: rgb(51, 132, 254);
     font-weight: 600;
     cursor: pointer;
@@ -490,7 +517,8 @@ tbody tr:last-child td {
     .child input[type="text"],
     .child input[type="password"],
     .child input[type="number"],
-    .child input[type="email"] {
+    .child input[type="email"],
+    .child input[type="date"] { /* Added date */
         width: 80%;
     }
 
@@ -501,6 +529,11 @@ tbody tr:last-child td {
     .textbox1, .textbox2 {
         width: 90%;
     }
+    
+    #new_medicine_child > label { /* Date labels */
+         width: 90%;
+    }
+
     .radio_div, .checkbox_div {
         width: 90%;
         flex-direction: column;
@@ -571,12 +604,14 @@ tbody tr:last-child td {
         font-weight: bold;
         color: navy; /* Label color */
     }
-    /* Data labels for each cell */
+    /* Data labels for each cell (Updated) */
     td:nth-of-type(1):before { content: "Si.No."; }
     td:nth-of-type(2):before { content: "Medicine"; }
     td:nth-of-type(3):before { content: "Dose"; }
-    td:nth-of-type(4):before { content: "Food Relation"; }
-    td:nth-of-type(5):before { content: "Morning"; }
-    td:nth-of-type(6):before { content: "Noon"; }
-    td:nth-of-type(7):before { content: "Night"; }
+    td:nth-of-type(4):before { content: "Start Date"; }
+    td:nth-of-type(5):before { content: "End Date"; }
+    td:nth-of-type(6):before { content: "Times/Day"; }
+    td:nth-of-type(7):before { content: "Morning"; }
+    td:nth-of-type(8):before { content: "Noon"; }
+    td:nth-of-type(9):before { content: "Night"; }
 }

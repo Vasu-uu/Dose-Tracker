@@ -32,12 +32,13 @@
                 <br>
                 <input class="textbox2" type="text" id="dose" placeholder="Dose (e.g., 500mg)" required>
                 
-                <div class="radio_div">
-                    <h3>Before / After food?</h3>
-                    <input type="radio" id="before" name="food_time" value="Before" required><label for="before">Before</label>
-                    <input type="radio" id="after" name="food_time" value="After"><label for="after">After</label>
-                </div>
-                
+                <label for="start_date">Start Date:</label>
+                <input class="textbox2" type="date" id="start_date" required>
+
+                <label for="end_date">End Date:</label>
+                <input class="textbox2" type="date" id="end_date" required>
+
+                <input class="textbox2" type="number" id="times_per_day" placeholder="Times per day (e.g., 3)" required>
                 <div class="checkbox_div">
                     <h3>Medication Schedule</h3>
                     <label><input type="checkbox" id="morning" value="true"> Morning</label>
@@ -76,7 +77,14 @@
                 // Collect all data
                 const medicine_name = document.getElementById('medicine_name').value;
                 const dose = document.getElementById('dose').value;
-                const food_time = document.querySelector('input[name="food_time"]:checked').value;
+                
+                // New Fields
+                const start_date = document.getElementById('start_date').value;
+                const end_date = document.getElementById('end_date').value;
+                const times_per_day = parseInt(document.getElementById('times_per_day').value);
+
+                // Removed food_time
+                
                 const morning = document.getElementById('morning').checked;
                 const noon = document.getElementById('noon').checked;
                 const night = document.getElementById('night').checked;
@@ -85,7 +93,9 @@
                     user_id: parseInt(userId), // Send the user's ID
                     medicine_name: medicine_name,
                     dose: dose,
-                    food_time: food_time,
+                    start_date: start_date,     // New
+                    end_date: end_date,         // New
+                    times_per_day: times_per_day, // New
                     morning: morning,
                     noon: noon,
                     night: night

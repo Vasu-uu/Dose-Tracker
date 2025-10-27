@@ -53,8 +53,7 @@
                         <th>si.no.</th>
                         <th>Medicine</th>
                         <th>Dose</th>
-                        <th>After/Before Food</th>
-                        <th>Morning</th>
+                        <th>Start Date</th> <th>End Date</th>   <th>Times/Day</th>  <th>Morning</th>
                         <th>Noon</th>
                         <th>Night</th>
                     </tr>
@@ -85,7 +84,7 @@
 
         async function loadMedicines(userId) {
             const tableBody = document.getElementById('medicine-table-body');
-            tableBody.innerHTML = '<tr><td colspan="7">Loading...</td></tr>'; // Loading message
+            tableBody.innerHTML = '<tr><td colspan="9">Loading...</td></tr>'; // Updated colspan
 
             try {
                 // Fetch data from your /my_medicines endpoint
@@ -99,18 +98,21 @@
                 tableBody.innerHTML = ''; // Clear loading message
 
                 if (medicines.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="7">No medicines added yet.</td></tr>';
+                    tableBody.innerHTML = '<tr><td colspan="9">No medicines added yet.</td></tr>'; // Updated colspan
                     return;
                 }
 
                 // Populate table
                 medicines.forEach((med, index) => {
+                    // Updated row structure
                     const row = `
                         <tr>
                             <td>${index + 1}</td>
                             <td>${med.medicine_name}</td>
                             <td>${med.dosage}</td>
-                            <td>${med.food_time}</td>
+                            <td>${med.start_date}</td> 
+                            <td>${med.end_date}</td>
+                            <td>${med.times_per_day}</td>
                             <td>${med.schedule_morning ? '✔' : '—'}</td>
                             <td>${med.schedule_noon ? '✔' : '—'}</td>
                             <td>${med.schedule_night ? '✔' : '—'}</td>
@@ -121,7 +123,7 @@
 
             } catch (error) {
                 console.error('Error loading medicines:', error);
-                tableBody.innerHTML = '<tr><td colspan="7">Failed to load medicines.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="9">Failed to load medicines.</td></tr>'; // Updated colspan
             }
         }
 
