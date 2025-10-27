@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dose Tracker Login</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Simple error message styling */
+        #error-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html"><img class="header_logo" src="./images/logo.png" alt="Image not found"></a>
+        <h1 class="header_logo_name"><a href="index.html">Dose Tracker</a></h1>
+        <h2 class="header_h2"><a href="#">About</a></h2>
+    </header>
+
+    <div class="parent" id="login_parent">
+        <div class="child">
+            <h2>Log in</h2>
+            
+            <form id="login-form" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                <input type="email" id="email" placeholder="Enter Email" required>
+                <input type="password" id="password" placeholder="Enter Password" required>
+                <button type="submit" class="login_btn">Log in</button>
+            </form>
+
+            <div id="error-message"></div>
+
+            <h3>Don't have an account<button class="h3_btn" onclick="window.location.href='signin.html'">create account</button></h3>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Stop the form from submitting normally
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = ''; // Clear old errors
+
+            try {
+                // Send data to your Flask API
+                const response = await fetch('http://127.0.0.1:5000/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Login successful!
+                    // Store user data in localStorage to use across pages
+                    localStorage.setItem('dose_tracker_user_id', data.user_id);
+                    localStorage.setItem('dose_tracker_user_name', data.name);
+                    
+                    // Redirect to the medicine dashboard
+                    window.location.href = 'medicine.html';
+                } else {
+                    // Show error message from the API
+                    errorDiv.textContent = data.message || 'Login failed!';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                errorDiv.textContent = 'An error occurred. Please try again.';
+            }
+        });
+    </script>
+</body>
+</html>

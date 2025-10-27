@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dose Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Add styles for new elements */
+        #dashboard-header {
+            width: 95%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #dashboard-header h2 {
+            color: #3384FE;
+        }
+        #logout-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        #logout-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html"><img class="header_logo" src="./images/logo.png" alt="Image not found"></a>
+        <h1 class="header_logo_name"><a href="index.html">Dose Tracker</a></h1>
+        <h2 class="header_h2"><a href="#">About</a></h2>
+    </header>
+
+    <div class="parent" id="medicine_parent">
+        
+        <div id="dashboard-header">
+            <h2>Welcome, <span id="user-name"></span>!</h2>
+            <button id="logout-btn">Logout</button>
+        </div>
+
+        <div class="child" id="medicine_child">
+            <table>
+                <thead>
+                    <tr>
+                        <th>si.no.</th>
+                        <th>Medicine</th>
+                        <th>Dose</th>
+                        <th>After/Before Food</th>
+                        <th>Morning</th>
+                        <th>Noon</th>
+                        <th>Night</th>
+                    </tr>
+                </thead>
+                <tbody id="medicine-table-body">
+                    </tbody>
+            </table>
+        </div>
+        <button class="medicine_btn" onclick="window.location.href='new_medicine.html'">Enter Medicine</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check for login
+            const userId = localStorage.getItem('dose_tracker_user_id');
+            const userName = localStorage.getItem('dose_tracker_user_name');
+
+            if (!userId) {
+                // Not logged in, redirect to login page
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // User is logged in, set name and load data
+            document.getElementById('user-name').textContent = userName;
+            loadMedicines(userId);
+        });
+
+        async function loadMedicines(userId) {
+            const tableBody = document.getElementById('medicine-table-body');
+            tableBody.innerHTML = '<tr><td colspan="7">Loading...</td></tr>'; // Loading message
+
+            try {
+                // Fetch data from your /my_medicines endpoint
+                const response = await fetch(`http://127.0.0.1:5000/my_medicines/${userId}`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch medicines');
+                }
+
+                const medicines = await response.json();
+                tableBody.innerHTML = ''; // Clear loading message
+
+                if (medicines.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="7">No medicines added yet.</td></tr>';
+                    return;
+                }
+
+                // Populate table
+                medicines.forEach((med, index) => {
+                    const row = `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${med.medicine_name}</td>
+                            <td>${med.dosage}</td>
+                            <td>${med.food_time}</td>
+                            <td>${med.schedule_morning ? '✔' : '—'}</td>
+                            <td>${med.schedule_noon ? '✔' : '—'}</td>
+                            <td>${med.schedule_night ? '✔' : '—'}</td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+
+            } catch (error) {
+                console.error('Error loading medicines:', error);
+                tableBody.innerHTML = '<tr><td colspan="7">Failed to load medicines.</td></tr>';
+            }
+        }
+
+        // Logout button logic
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            // Clear stored user data
+            localStorage.removeItem('dose_tracker_user_id');
+            localStorage.removeItem('dose_tracker_user_name');
+            // Go back to login
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>

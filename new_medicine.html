@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dose Tracker - New Medicine</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #message {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html"><img class="header_logo" src="./images/logo.png" alt="Image not found"></a>
+        <h1 class="header_logo_name"><a href="index.html">Dose Tracker</a></h1>
+        <h2 class="header_h2"><a href="#">About</a></h2>
+    </header>
+
+    <div class="parent" id="new_medicine_parent">
+        
+        <form id="new-medicine-form" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+            <div class="child" id="new_medicine_child">
+                <h1>New Medicine</h1>
+                <h2>please fill the following details</h2>
+                
+                <input class="textbox1" type="text" id="medicine_name" placeholder="Medicine Name" required>
+                <br>
+                <input class="textbox2" type="text" id="dose" placeholder="Dose (e.g., 500mg)" required>
+                
+                <div class="radio_div">
+                    <h3>Before / After food?</h3>
+                    <input type="radio" id="before" name="food_time" value="Before" required><label for="before">Before</label>
+                    <input type="radio" id="after" name="food_time" value="After"><label for="after">After</label>
+                </div>
+                
+                <div class="checkbox_div">
+                    <h3>Medication Schedule</h3>
+                    <label><input type="checkbox" id="morning" value="true"> Morning</label>
+                    <label><input type="checkbox" id="noon" value="true"> Noon</label>
+                    <label><input type="checkbox" id="night" value="true"> Night</label>
+                </div>
+            </div>
+
+            <div id="message"></div>
+
+            <div class="btn_div">
+                <button type="button" class="cancel_btn" onclick="window.location.href='medicine.html'">Cancel</button>
+                <button type="submit" class="add_btn">Enter Medicine</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let userId = null; // Store user ID globally on this page
+
+        document.addEventListener('DOMContentLoaded', () => {
+            userId = localStorage.getItem('dose_tracker_user_id');
+            if (!userId) {
+                // Not logged in, redirect
+                alert('You must be logged in to add medicine.');
+                window.location.href = 'login.html';
+            }
+        });
+
+        document.getElementById('new-medicine-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = '';
+
+            try {
+                // Collect all data
+                const medicine_name = document.getElementById('medicine_name').value;
+                const dose = document.getElementById('dose').value;
+                const food_time = document.querySelector('input[name="food_time"]:checked').value;
+                const morning = document.getElementById('morning').checked;
+                const noon = document.getElementById('noon').checked;
+                const night = document.getElementById('night').checked;
+
+                const medicineData = {
+                    user_id: parseInt(userId), // Send the user's ID
+                    medicine_name: medicine_name,
+                    dose: dose,
+                    food_time: food_time,
+                    morning: morning,
+                    noon: noon,
+                    night: night
+                };
+
+                // Send to your /add_medicine endpoint
+                const response = await fetch('http://127.0.0.1:5000/add_medicine', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(medicineData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageDiv.textContent = 'Medicine added successfully! Redirecting...';
+                    messageDiv.className = 'success';
+                    setTimeout(() => {
+                        window.location.href = 'medicine.html';
+                    }, 1500);
+                } else {
+                    messageDiv.textContent = data.message || 'Failed to add medicine.';
+                    messageDiv.className = 'error';
+                }
+
+            } catch (error) {
+                console.error('Error adding medicine:', error);
+                messageDiv.textContent = 'An error occurred.';
+                messageDiv.className = 'error';
+            }
+        });
+    </script>
+</body>
+</html>
