@@ -63,7 +63,7 @@ Open `app.py` and find the `db_config` section (around line 18):
 db_config = {
     "host": "localhost",
     "user": "root",
-    "password": "Vasu2005",  # <-- Change this to your MySQL password
+    "password": " ",  # <-- Change this to your MySQL password
     "database": "medicine_reminder"
 }
 ```
