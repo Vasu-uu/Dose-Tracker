@@ -1,4 +1,4 @@
-````markdown
+
 # Dose Tracker - Medicine Reminder App
 
 This is a web application that helps users track their medicine schedules and sends automatic reminders for each dose.
